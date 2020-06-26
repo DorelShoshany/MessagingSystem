@@ -1,0 +1,8 @@
+
+max_lengths_for_id = 20
+max_lengths_for_subject=200
+max_lengths_for_content = 2000
+max_lengths_for_email=45
+max_lengths_for_password=100
+max_lengths_for_first_name=45
+max_lengths_for_last_name=45
