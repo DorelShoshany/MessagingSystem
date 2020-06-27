@@ -12,7 +12,6 @@ Click==7.0
 colorama==0.4.3
 crypto==1.4.1
 cryptography==2.8
-curve==0.1.0
 cycler==0.10.0
 decorator==4.4.2
 defusedxml==0.6.0
