@@ -1,11 +1,20 @@
 import datetime
-from flask_jwt_extended import create_access_token, set_access_cookies
-from Config import Config
+
+from BL.AccessTokenManager import AccessTokenManager
+from Config import Config, HttpStatusCode
+from Consts import BAD_USER_NAME_OR_PASSWORD
+from DAL.UserDAL import get_user_from_db_by_email
 from application import app
 from flask import request, json, jsonify
-from controllers.AuthorizationController import AuthorizationController
-from controllers.RegistrationController import RegistrationController
+from BL.Authorization import Authorization
+from BL.UserRegistration import UserRegistration
+from application.Utils.formValidator import FormValdaitor
+from application.controllers import  convert_request_form_to_user, convert_request_to_dictionary
 
+user_registration = UserRegistration()
+authorization = Authorization()
+form_valdaitor = FormValdaitor()
+access_token_manager = AccessTokenManager()
 
 @app.route("/")
 @app.route("/index")
@@ -13,28 +22,29 @@ def index():
     return "hi"
 
 
+# noinspection PyBroadException
 @app.route("/register", methods=['POST'])
-def api_register():
-    registration_controller = RegistrationController()
-    res = registration_controller.register_new_user(request)
-    if res.isSuccess:
-        return jsonify(res.Message), 201
-    else:
-        resp = jsonify(res.Message)
-        return resp, 400
+def register():
+    try:
+        new_user = convert_request_form_to_user(request);
+        user_registration.register_new_user(new_user)
+        return "ok", HttpStatusCode.CREATED.value
+    except Exception as e: # Error handling
+        return  str(e), HttpStatusCode.BAD_REQUEST.value
 
 
 @app.route("/login", methods=['POST'])
 def login():
-    authorization_controller = AuthorizationController()
-    user, authorizationResult = authorization_controller.login(request)
-    if authorizationResult.isSuccess:
-        expires = datetime.timedelta(days=Config.TIME_EXPIRES_ACCESS_TOKENS_ROLE_BASIC)
-        access_token = create_access_token(identity=json.dumps({"user": user.id}),
-                                           expires_delta=expires)
-        resp = jsonify({'login': True})
-        resp.set_cookie('access_token', access_token, expires)
-        #set_access_cookies(resp, access_token)
-        return resp, 200
-    else:
-        return jsonify(authorizationResult.Message), 404
+    try:
+        auth_request_dict = convert_request_to_dictionary(request, ['email', 'password'])
+        user = authorization.is_authorized(auth_request_dict['email'], auth_request_dict['password']);
+        if user is None:
+            return BAD_USER_NAME_OR_PASSWORD, HttpStatusCode.UNAUTHORIZED.value
+        else:
+            expires = datetime.timedelta(days=Config.TIME_EXPIRES_ACCESS_TOKENS_ROLE_BASIC)
+            access_token = access_token_manager.create(user.id, expires)
+            resp = jsonify({'login': True}) # TODO: Bonus - Check if necessary
+            resp.set_cookie('access_token', access_token, expires)
+            return resp, HttpStatusCode.OK.value  #HttpStatusCode.Ok
+    except NameError:
+        return HttpStatusCode.BAD_REQUEST.value

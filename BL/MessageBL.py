@@ -1,14 +1,12 @@
 from models.resultFromController import resultFromController
-from services.Validators import form_is_full
 
-
-class MessageController():
+class MessageBL():
 
     def send (self, request):
         register_form = request.json if request.is_json else request.form
         send_dict = dict(register_form)
         form_send_fields = ["receiverId", 'subject', 'content']
-        form_valid_res = form_is_full(send_dict, form_send_fields)
+        form_valid_res = form_valdaitor(send_dict, form_send_fields)
         if form_valid_res.isSuccess:
             receiverId = send_dict["receiverId"]
             subject = send_dict['subject']

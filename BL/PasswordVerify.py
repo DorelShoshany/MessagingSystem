@@ -1,4 +1,4 @@
-from services.PasswordEncryption import length_of_the_salt, hash_salt
+from BL.PasswordEncryption import length_of_the_salt, hash_salt
 
 
 def verify_user_password(user, enteredPassword):

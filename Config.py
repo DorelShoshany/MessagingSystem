@@ -22,7 +22,7 @@ class Config(object):
     JWT_TOKEN_LOCATION ='cookies'
     JWT_CSRF_CHECK_FORM = True
     JWT_COOKIE_CSRF_PROTECT = False
-    TIME_EXPIRES_ACCESS_TOKENS_ROLE_BASIC = 2  # days
+    TIME_EXPIRES_ACCESS_TOKENS_ROLE_BASIC = 1  # days
     DAYS_EXPIRES_ACCESS_TOKENS_ROLE_CHANGE_PASSWORD = 15  # minutes
     ROLE_BASIC = "basic"
     ROLE_CHANGE_PASSWORD = "change password"
@@ -40,27 +40,22 @@ class Config(object):
     #DICTIONARY_ATTACK = True
     #DICTIONARY_ATTACK_FILE = 'word_list.txt'
 
-    # consts for routes api :
-    BAD_USER_NAME_OR_PASSWORD = "Bad user name or password "
-    USER_IS_LOCKED_UNTIL = "User is locked until "
-    PASSWORD_NOT_CORRECT = "Password not correct "
-    USER_NOT_FOUND = "User not fund "
-    PASSWORD_CORRECT = "Password correct "
-    VERIFY_HASH_EMAIL_WITH_DATE_SUCCESS = "Success Verify your details "
-    VERIFY_HASH_EMAIL_WITH_DATE_FAILED = "Failed Verify your details "
-    PASSWORD_CHANGE_SUCCESS = "Password change success "
-    PASSWORD_CHANGE_FAILED = "Password change failed "
-    EMAIL_IS_NOT_VALID = "Email is not valid"
-    EMAIL_IS_VALID = "Email is valid"
-    PASSWORD_WAS_USED_IN_THE_LAST_GIVEN_OCCURRENCES = "password was used in the last given occurrences "
-    MSG_FOR_ROLE_REQUIRED = "can't continue without login!"
 
 
-class TypeOfSort(enum.Enum):
+    #TODO chake where to put the email
+class deleteState(enum.Enum):
     DELETED = 0
     DELETED_FOR_RECEIVER = 1
     DELETED_FOR_SENDER = 2
     DELETED_FOR_ALL = 3
+
+class HttpStatusCode(enum.Enum):
+    OK = 200
+    BAD_REQUEST = 400
+    CREATED = 201
+    UNAUTHORIZED = 401
+
+
 
 
 '''

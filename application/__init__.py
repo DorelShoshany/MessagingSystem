@@ -13,8 +13,7 @@ db.init_app(app)
 ma = Marshmallow(app)
 jwt = JWTManager(app)
 
-
-from application import routersAuth
+from application.controllers import AuthController
 
 
 @app.before_first_request

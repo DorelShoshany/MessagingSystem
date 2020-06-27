@@ -1,39 +1,54 @@
-from entities.User import User
-from models.resultFromController import resultFromController
-from services import PasswordEncryption
-from services.DAL.User import save_new_user_to_db, get_user_from_db_by_email
-from services.Validators import form_is_full, user_is_valid, password_is_valid
+import re
+from Config import Config
+from Consts import MAX_LENGTHS_FOR_FIRST_NAME, MAX_LENGTHS_FOR_LAST_NAME, EMAIL_IS_NOT_VALID, EMAIL_ALREADY_EXISTS, \
+    PASSWORD_SHOULD_BE_EXACTLY, FORM_NOT_FULL, MIN_LENGTHS_FOR_FIRST_NAME, MIN_LENGTHS_FOR_LAST_NAME
+from BL import PasswordEncryption
+from DAL.UserDAL import save_new_user_to_db, get_user_from_db_by_email
 
 
-class RegistrationController():
+class UserRegistration():
 
-    def register_new_user(self, request):
-        register_form = request.json if request.is_json else request.form
-        register_dict = dict(register_form)
-        form_register_fields = ["firstName", 'lastName', 'email', 'password']
-        form_valid_res = form_is_full(register_dict, form_register_fields)
+    def register_new_user(self, new_user):
+        self.__ensure_validation__(new_user)
+        new_user.password = PasswordEncryption.hash_salt(password=new_user.password, salt=None)
+        save_new_user_to_db(new_user)
 
-        if form_valid_res.isSuccess:
-            firstName = register_dict["firstName"]
-            lastName = register_dict['lastName']
-            email = register_dict['email']
-            password = register_dict['password']
+    def __ensure_validation__(self,new_user):
+        self.__ensure_required_validtion__(new_user) # Make sure all the properties are valid
+        self.__ensure_email_validation__(new_user)
+        self.__ensure_valid_password__(new_user.password)
 
-            # handle unique email in SQLAlchemy
-            user = get_user_from_db_by_email(email)
-            if user:
-                return resultFromController(isSuccess=False, Message="User created failed. ")
 
-            user = User(firstName=firstName, lastName=lastName, email=email, password=password)
-            if user_is_valid(user).isSuccess:
-                if password_is_valid(user.password).isSuccess:
-                    password_encrypt = PasswordEncryption.hash_salt(password=password, salt=None)
-                    user.password = password_encrypt
-                    if save_new_user_to_db(user):
-                        return resultFromController(isSuccess=True, Message="User created successfully. ")
-                else:
-                    return password_is_valid(user.password)
-            else:
-                return resultFromController(isSuccess=False, Message="User created failed. ")
+    # TODO cheake is the call is only from the inside
+    def __ensure_required_validtion__(self, new_user):
+        if "" or None or '""' in new_user.__dict__.values():
+            raise Exception(FORM_NOT_FULL)
+        # TODO: should be in consts?
+        if len(new_user.firstName) < MIN_LENGTHS_FOR_FIRST_NAME or len(new_user.firstName) > MAX_LENGTHS_FOR_FIRST_NAME:
+            raise Exception("Bad first name, first name should be between " +
+                            str(MIN_LENGTHS_FOR_FIRST_NAME) + " to" + str(MAX_LENGTHS_FOR_FIRST_NAME))
+
+        if len(new_user.firstName) <= MIN_LENGTHS_FOR_LAST_NAME or len(new_user.firstName) > MAX_LENGTHS_FOR_LAST_NAME:
+            raise Exception("Bad last name, last name should be between " +
+                            str(MIN_LENGTHS_FOR_LAST_NAME) + " to " + str(MAX_LENGTHS_FOR_LAST_NAME))
+
+
+    def __ensure_email_validation__(self, email_address):
+        regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+        if re.search(regex, str(email_address)) is None:
+            raise Exception(EMAIL_IS_NOT_VALID)
         else:
-            return form_valid_res
+            match_user = get_user_from_db_by_email(str(email_address))
+            if match_user is not None:
+               raise Exception(EMAIL_ALREADY_EXISTS)
+
+
+    def __ensure_valid_password__(self,password):
+        password = str(password)
+        if len(password) != Config.LENGTH_OF_THE_PASSWORD:
+            raise Exception(PASSWORD_SHOULD_BE_EXACTLY + str(
+                Config.LENGTH_OF_THE_PASSWORD))
+
+        for value, msg in Config.PASSWORD_VALIDATION_STRUCTURE.items():
+            if re.search(value, password) is None:
+                raise Exception(msg)
