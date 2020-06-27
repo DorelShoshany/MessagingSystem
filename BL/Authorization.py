@@ -7,7 +7,7 @@ from services.PasswordEncryption import verify_user_password
 from services.Validators import form_is_full
 
 
-class AuthorizationController():
+class AuthorizationBL():
     def login(self, request):
         login_form = request.json if request.is_json else request.form
         login_dict = dict(login_form)
