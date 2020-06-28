@@ -37,17 +37,14 @@ class Config(object):
                                      '[A-Z]': "Make sure your password has a capital letter in it ",
                                      '[a-z]': "Make sure your password has a lower letter case in it "
                                      }
-    #DICTIONARY_ATTACK = True
-    #DICTIONARY_ATTACK_FILE = 'word_list.txt'
 
 
-
-    #TODO chake where to put the enum
-class deleteState(enum.Enum):
+class DeleteState(enum.Enum):
     NOT_DELETED = 0
     DELETED_FOR_RECEIVER = 1
     DELETED_FOR_SENDER = 2
     DELETED_FOR_ALL = 3
+
 
 class HttpStatusCode(enum.Enum):
     OK = 200

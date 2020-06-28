@@ -1,5 +1,5 @@
 
-from application import ma
+from Application import ma
 from marshmallow_sqlalchemy import ModelSchema
 
 class MessageDto(ModelSchema):

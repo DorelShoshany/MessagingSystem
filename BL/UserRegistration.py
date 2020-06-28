@@ -11,18 +11,20 @@ class UserRegistration():
     def register_new_user(self, new_user):
         self.__ensure_validation__(new_user)
         new_user.password = PasswordEncryption.hash_salt(password=new_user.password, salt=None)
-        return save_new_user_to_db(new_user)
+        new_user = save_new_user_to_db(new_user)
+        if new_user is None:
+            raise Exception("Register failed ")
+        else:
+            return new_user
 
     def __ensure_validation__(self,new_user):
-        self.__ensure_required_validtion__(new_user) # Make sure all the properties are valid
+        self.__ensure_required_validation__(new_user) # Make sure all the properties are valid
         self.__ensure_email_validation__(new_user)
         self.__ensure_valid_password__(new_user.password)
 
-
-    def __ensure_required_validtion__(self, new_user):
+    def __ensure_required_validation__(self, new_user):
         if "" or None or '""' in new_user.__dict__.values():
             raise Exception(FORM_NOT_FULL)
-        # TODO: should be in consts?
         if len(new_user.firstName) < MIN_LENGTHS_FOR_FIRST_NAME or len(new_user.firstName) > MAX_LENGTHS_FOR_FIRST_NAME:
             raise Exception("Bad first name, first name should be between " +
                             str(MIN_LENGTHS_FOR_FIRST_NAME) + " to" + str(MAX_LENGTHS_FOR_FIRST_NAME))
@@ -35,7 +37,7 @@ class UserRegistration():
     def __ensure_email_validation__(self, email_address):
         regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
         email_as_str = str(email_address)
-        if re.search(regex, email_as_str) is None:
+        if re.match(regex, email_as_str) is not None:
             match_user = get_user_from_db_by_email(email_as_str)
             if match_user is not None:
                raise Exception(EMAIL_ALREADY_EXISTS)

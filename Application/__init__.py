@@ -12,7 +12,7 @@ db.init_app(app)
 ma = Marshmallow(app)
 jwt = JWTManager(app)
 
-from application.controllers import AuthController, MessagesController
+from Application.Controllers import AuthController, MessagesController
 
 @app.before_first_request
 def create_tables():

@@ -4,7 +4,7 @@ from sqlalchemy import Column, ForeignKey
 from sqlalchemy import DateTime, func, ForeignKey
 import uuid
 from Consts import  MAX_LENGTHS_FOR_PASSWORD, MAX_LENGTHS_FOR_EMAIL, MAX_LENGTHS_FOR_LAST_NAME, MAX_LENGTHS_FOR_FIRST_NAME
-from application import db
+from Application import db
 
 def generate_uuid():
     return str(uuid.uuid4())

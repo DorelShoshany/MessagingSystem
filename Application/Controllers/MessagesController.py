@@ -5,14 +5,14 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from BL.AccessTokenManager import AccessTokenManager
 from BL.MessageCreator import MessageCreator
 from BL.MessagesUpdater import MessagesUpdater
-from BL.Modles.MessageDto import MessageDto
+from BL.Models.MessageDto import MessageDto
 from BL.UserMessagesProvider import UserMessagesProvider
 from Config import HttpStatusCode
 from Consts import MY_ONLY_SHOULD_BE_BOOLEAN, MESSAGE_SUCCESSFULLY_DELETED
-from application import app
-from application.controllers import convert_request_to_dictionary, is_valid_form, \
+from Application import app
+from Application.Controllers import convert_request_to_dictionary, is_valid_form, \
     convert_request_form_to_entity
-from application.controllers.AuthController import access_token_manager
+from Application.Controllers.AuthController import access_token_manager
 
 # init once
 access_token_manager = AccessTokenManager()
@@ -45,12 +45,11 @@ def get():
 @jwt_required
 def unread():
     '''
-    will return all unread and not deleted messages where the user is the receiver order by created date asc
+    will return all unread and not deleted messages where the user is the receiver
     *not deleted messages for receiver are message where the deleteState doesn't equal 1 or 3
     :return: all unread and not deleted messages
     '''
     try:
-        #TODO order by crated date
         user_id = access_token_manager.get_user_id_from_identity(get_jwt_identity())
         receiver_unread_messages = user_messages_provider.get_unread(user_id)
         receiver_unread_messages_dto = MessageDto(many=True)
@@ -90,7 +89,7 @@ def send():
     '''
     This will create a message and return the new message id  as a response
     The sender id will be taken from the access token
-    The reason I didn't use an email for the receiver address is because I assume this is part of an application
+    The reason I didn't use an email for the receiver address is because I assume this is part of an Application
     where the user can select which user he want to send and the client has the receiver id
      (Lets assume its being implemented by other service)
     :return: String message id

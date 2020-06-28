@@ -1,7 +1,7 @@
 from sqlalchemy import and_
-from Config import deleteState
-from application import db
-from entities.Message import Message
+from Config import DeleteState
+from Application import db
+from DAL.entities.Message import Message
 
 
 def add_message (message):
@@ -15,6 +15,6 @@ def add_message (message):
 
 
 def get_message(message_id):
-    message = Message.query.filter(and_(Message.id == message_id, Message.deleteState != deleteState.DELETED_FOR_ALL.value)).first()
+    message = Message.query.filter(and_(Message.id == message_id, Message.deleteState != DeleteState.DELETED_FOR_ALL.value)).first()
     return message
 

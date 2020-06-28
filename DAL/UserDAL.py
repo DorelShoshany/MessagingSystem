@@ -1,6 +1,6 @@
 
-from application import db
-from entities.User import User
+from Application import db
+from DAL.entities.User import User
 
 
 def save_new_user_to_db (user):
