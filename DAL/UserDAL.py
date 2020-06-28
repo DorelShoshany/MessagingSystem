@@ -14,9 +14,9 @@ def save_new_user_to_db (user):
         return False
 
 
+
 def get_user_from_db_by_email(email):
     return User.query.filter_by(email=email).first()
-
 
 def get_user_from_db_by_id(userId):
     return User.query.filter_by(id=userId).first()

@@ -9,7 +9,7 @@ from application import db
 
 class User(db.Model):
     __tablename__ = 'Users'
-    id = Column(db.String, name="id", primary_key=True, default= str(uuid.uuid4()))
+    id = Column(db.String, name="id", primary_key=True, default=str(uuid.uuid1()))
     email = Column(db.String(MAX_LENGTHS_FOR_EMAIL), unique=True, nullable=False)
     password = Column(db.String(MAX_LENGTHS_FOR_PASSWORD), nullable=False)
     firstName = Column(db.String(MAX_LENGTHS_FOR_FIRST_NAME), nullable=False)

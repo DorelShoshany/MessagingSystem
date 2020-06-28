@@ -42,9 +42,9 @@ class Config(object):
 
 
 
-    #TODO chake where to put the email
+    #TODO chake where to put the enum
 class deleteState(enum.Enum):
-    DELETED = 0
+    NOT_DELETED = 0
     DELETED_FOR_RECEIVER = 1
     DELETED_FOR_SENDER = 2
     DELETED_FOR_ALL = 3
