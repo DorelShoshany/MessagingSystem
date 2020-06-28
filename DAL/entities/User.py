@@ -10,7 +10,6 @@ def generate_uuid():
     return str(uuid.uuid4())
 
 class User(db.Model):
-    #TODO: diside if the porperty is with _ or not
     __tablename__ = 'Users'
     id = Column(db.String , name="id", primary_key=True, default=generate_uuid)
     email = Column(db.String(MAX_LENGTHS_FOR_EMAIL), unique=True, nullable=False)
