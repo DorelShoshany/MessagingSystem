@@ -25,3 +25,7 @@ class Message(db.Model):
         self.subject = subject
         self.content = content
         self.deleteState = deleteState.NOT_DELETED.value
+
+    @classmethod
+    def from_json(cls, data):
+        return cls(**data)

@@ -1,15 +1,12 @@
 import datetime
-
 from BL.AccessTokenManager import AccessTokenManager
 from Config import Config, HttpStatusCode
 from Consts import BAD_USER_NAME_OR_PASSWORD, REGISTER_SUCCEEDED, MSG_FOR_ROLE_REQUIRED
-from DAL.UserDAL import get_user_from_db_by_email
 from application import app, jwt
-from flask import request, json, jsonify
+from flask import request, jsonify
 from BL.Authorization import Authorization
 from BL.UserRegistration import UserRegistration
-from application.Utils.formValidator import FormValdaitor
-from application.controllers import  convert_request_form_to_user, convert_request_to_dictionary
+from application.controllers import  convert_request_form_to_entity, convert_request_to_dictionary
 
 user_registration = UserRegistration()
 authorization = Authorization()
@@ -25,7 +22,8 @@ def index():
 @app.route("/register", methods=['POST'])
 def register():
     try:
-        new_user = convert_request_form_to_user(request);
+        properties = ['firstName', 'lastName', 'email', 'password']
+        new_user = convert_request_form_to_entity(request, properties, "User");
         user_registration.register_new_user(new_user)
         return REGISTER_SUCCEEDED, HttpStatusCode.CREATED.value
     except Exception as e: # Error handling
@@ -51,5 +49,4 @@ def login():
 
 @jwt.unauthorized_loader
 def unauthorized_callback(callback):
-    # No auth header
-    return jsonify(MSG_FOR_ROLE_REQUIRED),  HttpStatusCode.UNAUTHORIZED.value # redirect(app.config['BASE_URL'] + '/login', 302)
+    return jsonify(MSG_FOR_ROLE_REQUIRED),  HttpStatusCode.UNAUTHORIZED.value

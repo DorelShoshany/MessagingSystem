@@ -11,7 +11,8 @@ from Config import HttpStatusCode
 from Consts import INVALID_REQUEST_PARAMS, ASK_FOR_MESSAGE_ID, FORM_NOT_FULL, MY_ONLY_SHOULD_BE_BOOLEAN, \
     MESSAGE_SUCCESSFULLY_DELETED
 from application import app
-from application.controllers import convert_request_form_to_message, convert_request_to_dictionary, is_valid_form
+from application.controllers import convert_request_to_dictionary, is_valid_form, \
+    convert_request_form_to_entity
 from application.controllers.AuthController import access_token_manager
 
 # init once
@@ -94,7 +95,8 @@ def send():
     :return: String message id
     '''
     try:
-        new_message = convert_request_form_to_message(request)
+        properties = ['receiver_id', 'subject', 'content']
+        new_message = convert_request_form_to_entity(request, properties, "Message")
         user_id = access_token_manager.get_user_id_from_identity(get_jwt_identity())
         message_id = message_creator.create(new_message, user_id)
         return jsonify({'Message Id': str(message_id)}), HttpStatusCode.OK.value

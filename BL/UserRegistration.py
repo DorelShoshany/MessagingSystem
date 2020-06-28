@@ -28,14 +28,16 @@ class UserRegistration():
             raise Exception("Bad first name, first name should be between " +
                             str(MIN_LENGTHS_FOR_FIRST_NAME) + " to" + str(MAX_LENGTHS_FOR_FIRST_NAME))
 
-        if len(new_user.firstName) <= MIN_LENGTHS_FOR_LAST_NAME or len(new_user.firstName) > MAX_LENGTHS_FOR_LAST_NAME:
+        if len(new_user.lastName) <= MIN_LENGTHS_FOR_LAST_NAME or len(new_user.lastName) > MAX_LENGTHS_FOR_LAST_NAME:
             raise Exception("Bad last name, last name should be between " +
                             str(MIN_LENGTHS_FOR_LAST_NAME) + " to " + str(MAX_LENGTHS_FOR_LAST_NAME))
 
 
     def __ensure_email_validation__(self, email_address):
         regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
-        if re.search(regex, str(email_address)) is None:
+        email_as_str = str(email_address)
+        print(type(email_address))
+        if re.search(regex, email_as_str) is None:
             raise Exception(EMAIL_IS_NOT_VALID)
         else:
             match_user = get_user_from_db_by_email(str(email_address))

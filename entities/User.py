@@ -22,6 +22,7 @@ class User(db.Model):
         self.firstName = firstName
         self.lastName = lastName
 
+
     def __str__(self):
         return str(self.email)
 
