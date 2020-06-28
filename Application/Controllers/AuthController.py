@@ -48,7 +48,7 @@ def login():
         resp = jsonify({'login': True})
         resp.set_cookie('access_token_cookie', access_token, expires)
         return resp, HttpStatusCode.OK.value
-    except NameError:
+    except Exception:
         return BAD_USER_NAME_OR_PASSWORD, HttpStatusCode.UNAUTHORIZED.value
 
 

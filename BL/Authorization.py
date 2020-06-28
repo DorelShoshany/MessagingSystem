@@ -11,9 +11,11 @@ class Authorization():
         :return: user or None
         '''
         user = UserDAL.get_user_from_db_by_email(email)
-        if user:
+        if user is not None:
             if verify_user_password(user, enteredPassword):
                 return user
+            else:
+                raise Exception(BAD_USER_NAME_OR_PASSWORD)
         else:
             raise Exception(BAD_USER_NAME_OR_PASSWORD)
 
