@@ -11,8 +11,7 @@ class AccessTokenManager():
             expires = datetime.timedelta(days=1)
         if user_id is None:
             raise Exception("user id not valid")
-        return create_access_token(identity=json.dumps({"user": user_id}),
-                                           expires_delta=expires)
+        return create_access_token(identity=json.dumps({"user": user_id}), expires_delta=expires)
 
     def get_user_id_from_identity(self,jwt_identity):
         dict_identity = ast.literal_eval(jwt_identity)

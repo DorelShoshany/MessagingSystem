@@ -5,18 +5,17 @@ from entities.User import User
 
 def save_new_user_to_db (user):
     try:
-        #db.session.execute("select * form User where name = %s" % ' ')
         db.session.add(user)
         db.session.commit()
-        return True
+        return user
     except IOError:
         db.session.rollback()
-        return False
-
+        return None
 
 
 def get_user_from_db_by_email(email):
     return User.query.filter_by(email=email).first()
+
 
 def get_user_from_db_by_id(userId):
     return User.query.filter_by(id=userId).first()

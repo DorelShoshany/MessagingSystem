@@ -19,7 +19,7 @@ class MessagesUpdater():
         is_valid_request = message is None or (message.sender_id != user_id and message.receiver_id != user_id)
         if is_valid_request:
             raise Exception(MESSAGE_DOEST_EXISTS_OR_DOESNT_BELONG_TO_USER)
-        if message.receiver_id == user_id:
+        if message.receiver_id == user_id:  # user the it receiver
             if message.deleteState == deleteState.DELETED_FOR_SENDER.value:
                 message.deleteState = deleteState.DELETED_FOR_ALL.value
             else:

@@ -37,6 +37,6 @@ class UserMessagesProvider():
         unread_receiver_message = Message.query.filter(
             and_(Message.receiver_id == user_id,
                  Message.deleteState != deleteState.DELETED_FOR_ALL.value,
-                 Message.deleteState != deleteState.DELETED_FOR_RECEIVER.value))
+                 Message.deleteState != deleteState.DELETED_FOR_RECEIVER.value, Message.lastReadDate == None))
 
         return unread_receiver_message

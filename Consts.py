@@ -1,22 +1,28 @@
 
-# TODO: check if it shulde be a upper case?
-
-
+# id:
 MAX_LENGTHS_FOR_ID = 20
-MIN_LENGTHS_FOR_FIRST_NAME = 3
-MIN_LENGTHS_FOR_LAST_NAME = 3
-MAX_LENGTHS_FOR_PASSWORD = 100
-MAX_LENGTHS_FOR_EMAIL = 45
+
+# first name:
 MAX_LENGTHS_FOR_FIRST_NAME = 45
+MIN_LENGTHS_FOR_FIRST_NAME = 3
+
+# last name:
+MIN_LENGTHS_FOR_LAST_NAME = 3
 MAX_LENGTHS_FOR_LAST_NAME = 45
 
+# password:
+MAX_LENGTHS_FOR_PASSWORD = 100
 
+# email:
+MAX_LENGTHS_FOR_EMAIL = 45
+
+# message:
 MAX_LENGTHS_FOR_SUBJECT = 200
-MAX_LENGTHS_FOR_CONTENT = 2000
 MIN_LENGTHS_FOR_SUBJECT = 0
+MAX_LENGTHS_FOR_CONTENT = 2000
 MIN_LENGTHS_FOR_CONTENT = 0
 
-# consts for api :
+# consts for return msg :
 
 BAD_USER_NAME_OR_PASSWORD = "Bad email or password "
 EMAIL_IS_NOT_VALID = "Email is not valid "
@@ -35,3 +41,4 @@ MESSAGE_DOEST_EXISTS_OR_DOESNT_BELONG_TO_USER = "Message does't exists or doesn'
 MY_ONLY_SHOULD_BE_BOOLEAN = "My only should be a boolean type"
 MESSAGE_SUCCESSFULLY_DELETED = "The message was successfully deleted"
 BAD_REQUEST_MARK_READ = "Bad request for mark read"
+WELCOME_MESSAGE = "Welcome to MessagingSystem !"

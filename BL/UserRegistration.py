@@ -11,7 +11,7 @@ class UserRegistration():
     def register_new_user(self, new_user):
         self.__ensure_validation__(new_user)
         new_user.password = PasswordEncryption.hash_salt(password=new_user.password, salt=None)
-        save_new_user_to_db(new_user)
+        return save_new_user_to_db(new_user)
 
     def __ensure_validation__(self,new_user):
         self.__ensure_required_validtion__(new_user) # Make sure all the properties are valid
@@ -19,7 +19,6 @@ class UserRegistration():
         self.__ensure_valid_password__(new_user.password)
 
 
-    # TODO cheake is the call is only from the inside
     def __ensure_required_validtion__(self, new_user):
         if "" or None or '""' in new_user.__dict__.values():
             raise Exception(FORM_NOT_FULL)
@@ -28,7 +27,7 @@ class UserRegistration():
             raise Exception("Bad first name, first name should be between " +
                             str(MIN_LENGTHS_FOR_FIRST_NAME) + " to" + str(MAX_LENGTHS_FOR_FIRST_NAME))
 
-        if len(new_user.lastName) <= MIN_LENGTHS_FOR_LAST_NAME or len(new_user.lastName) > MAX_LENGTHS_FOR_LAST_NAME:
+        if len(new_user.lastName) < MIN_LENGTHS_FOR_LAST_NAME or len(new_user.lastName) > MAX_LENGTHS_FOR_LAST_NAME:
             raise Exception("Bad last name, last name should be between " +
                             str(MIN_LENGTHS_FOR_LAST_NAME) + " to " + str(MAX_LENGTHS_FOR_LAST_NAME))
 
@@ -36,13 +35,12 @@ class UserRegistration():
     def __ensure_email_validation__(self, email_address):
         regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
         email_as_str = str(email_address)
-        print(type(email_address))
         if re.search(regex, email_as_str) is None:
-            raise Exception(EMAIL_IS_NOT_VALID)
-        else:
-            match_user = get_user_from_db_by_email(str(email_address))
+            match_user = get_user_from_db_by_email(email_as_str)
             if match_user is not None:
                raise Exception(EMAIL_ALREADY_EXISTS)
+        else:
+            raise Exception(EMAIL_IS_NOT_VALID)
 
 
     def __ensure_valid_password__(self,password):

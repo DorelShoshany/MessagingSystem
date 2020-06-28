@@ -6,7 +6,9 @@ def verify_user_password(user, enteredPassword):
     userDbPassword <-select the hashed password from database for the given user
     salt < -extract the salt part from the saved password in database
     return PasswordEncryptor.HashSalt(enteredPassword, salt) == userDbPassword
-
+    :param user: user
+    :param enteredPassword: string
+    :return: boolean
     '''
     storage = user.password
 

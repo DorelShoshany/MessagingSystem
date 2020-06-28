@@ -1,4 +1,3 @@
-from models.resultFromController import resultFromController
 
 class MessageBL():
 
