@@ -4,7 +4,6 @@ import datetime
 import uuid
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy import DateTime, func, ForeignKey
-
 from Config import deleteState
 from Consts import MAX_LENGTHS_FOR_ID, MAX_LENGTHS_FOR_SUBJECT, MAX_LENGTHS_FOR_CONTENT
 from application import db

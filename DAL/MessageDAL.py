@@ -1,6 +1,7 @@
+from sqlalchemy import and_
 from Config import deleteState
 from application import db
-from entities import Message
+from entities.Message import Message
 
 
 def add_message (message):
@@ -15,5 +16,6 @@ def add_message (message):
 
 
 def get_message(message_id):
-    return Message.query.filter_by(id=message_id, deleteState=deleteState.DELETED_FOR_ALL.value is None).first()
+    message= Message.query.filter(and_(Message.id == message_id, Message.deleteState != deleteState.DELETED_FOR_ALL.value)).first()
+    return message
 

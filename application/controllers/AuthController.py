@@ -35,7 +35,7 @@ def register():
 @app.route("/login", methods=['POST'])
 def login():
     try:
-        auth_request_dict = convert_request_to_dictionary(request, ['email', 'password'])
+        auth_request_dict = convert_request_to_dictionary(request)
         user = authorization.is_authorized(auth_request_dict['email'], auth_request_dict['password']);
         if user is None:
             return BAD_USER_NAME_OR_PASSWORD, HttpStatusCode.UNAUTHORIZED.value

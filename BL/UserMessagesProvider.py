@@ -1,8 +1,8 @@
 from Config import deleteState
-from DAL.MessageDAL import get_message
-from entities.Message import Message
 from sqlalchemy import or_
 from sqlalchemy import and_
+from DAL.MessageDAL import get_message
+from entities.Message import Message
 
 
 class UserMessagesProvider():
@@ -25,23 +25,18 @@ class UserMessagesProvider():
         '''
         not_deleted_messages_user = Message.query.filter(
             and_(Message.deleteState != deleteState.DELETED_FOR_ALL.value,
+                or_(
                 and_(Message.sender_id == user_id, Message.deleteState != deleteState.DELETED_FOR_SENDER.value),
-                and_(Message.receiver_id == user_id, Message.deleteState != deleteState.DELETED_FOR_RECEIVER.value)))
+                and_(Message.receiver_id == user_id, Message.deleteState != deleteState.DELETED_FOR_RECEIVER.value))))
         return not_deleted_messages_user
-
 
     def get_unread(self, user_id):
         '''
         :return: message[] object orm
         '''
-
         unread_receiver_message = Message.query.filter(
             and_(Message.receiver_id == user_id,
-                and_(Message.deleteState != deleteState.NOT_DELETED.value),
-                and_(Message.deleteState != deleteState.DELETED_FOR_RECEIVER.value)))
+                 Message.deleteState != deleteState.DELETED_FOR_ALL.value,
+                 Message.deleteState != deleteState.DELETED_FOR_RECEIVER.value))
 
         return unread_receiver_message
-     #   db.message.where(message= >
-      #                               message.reciever_id = user_id & &
-       #                                                    message.delete_state != MessageState.NotDeleted & &
-        #                                                   message.delete_state != MessageState.DeleteForReceiver;
